@@ -1,10 +1,6 @@
 import { atom } from "recoil";
 import { selector } from "recoil";
 
-export const cartItem = atom({
-  key: "cartItems",
-  default: 0,
-});
 
 export const items = atom({
   default: [],
@@ -13,7 +9,7 @@ export const items = atom({
 
 export const searchAtom = atom({
   key: "search",
-  default: localStorage.getItem("Prevsearched")
+  default: localStorage.getItem("Prevsearched")?? ""
 });
 
 export const searchSpecifcItem = selector({
