@@ -13,17 +13,23 @@ function App() {
   useEffect(() => {
     const getProducts = async () => {
       const data = await fetchProducts();
+      const grahsti = localStorage.getItem("cartItems");
+      const parsedGrahsti = JSON.parse(grahsti) ?? [];
       setproducts(
         data.map((item) => {
+          const _item = parsedGrahsti.find((item2) => item2.id === item.id);
+          // {id:1,updatedCount:5}
+          const cartQuantity = _item ? _item.updatedCount : 0;
           return {
             ...item,
-            cartQuantity: 0,
+            cartQuantity,
           };
         })
       );
     };
     getProducts();
   }, []);
+
   return (
     <BrowserRouter>
       <div className="h-[200vh]">

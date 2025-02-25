@@ -2,6 +2,29 @@ import React from "react";
 import { useSetRecoilState } from "recoil";
 import { items } from "../states/atoms";
 
+function saveToLocalStorage(id, updatedCount) {
+  let prevItems = localStorage.getItem("cartItems");
+  prevItems = JSON.parse(prevItems) ?? [];
+
+  const newItems = [...prevItems];
+  let exists = false;
+  for (let i = 0; i < newItems.length; i++) {
+    const item = newItems[i];
+    if (item.id === id) {
+      exists = true;
+      newItems[i].updatedCount = updatedCount;
+    }
+  }
+
+  if (exists === false) {
+    newItems.push({
+      id,
+      updatedCount,
+    });
+  }
+  localStorage.setItem("cartItems", JSON.stringify(newItems));
+}
+
 export default function Card({ product, isPresent }) {
   const setItems = useSetRecoilState(items);
 
@@ -27,6 +50,7 @@ export default function Card({ product, isPresent }) {
         className="mt-3 bg-yellow-500 font-bold p-2"
         onClick={() => {
           if (product.cartQuantity === 0) {
+            saveToLocalStorage(product.id, 1);
             setItems((prev) =>
               prev.map((item) =>
                 item.id === product.id
@@ -50,7 +74,9 @@ export default function Card({ product, isPresent }) {
       >
         <button
           className="border-2 px-2"
-          onClick={() =>
+          onClick={() => {
+            saveToLocalStorage(product.id, product.cartQuantity - 1);
+
             setItems((prev) =>
               prev.map((item) =>
                 item.id === product.id
@@ -60,15 +86,16 @@ export default function Card({ product, isPresent }) {
                     }
                   : item
               )
-            )
-          }
+            );
+          }}
         >
           -
         </button>
         <p className="border-2 px-2">{product.cartQuantity}</p>
         <button
           className="border-2  px-2"
-          onClick={() =>
+          onClick={() => {
+            saveToLocalStorage(product.id, product.cartQuantity + 1);
             setItems((prev) =>
               prev.map((item) =>
                 item.id === product.id
@@ -78,8 +105,8 @@ export default function Card({ product, isPresent }) {
                     }
                   : item
               )
-            )
-          }
+            );
+          }}
         >
           +
         </button>
