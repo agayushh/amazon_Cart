@@ -10,13 +10,6 @@ export default function Home() {
 
   const searchWalItems = useRecoilValue(searchSpecifcItem);
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const data = await fetchProducts();
-      setproducts(data);
-    };
-    getProducts();
-  }, []);
   return (
     <div className="flex">
       <div className="font-bold font-serif text-4xl bg-slate-300/90 w-fit p-5 pr-16 h-fit">
